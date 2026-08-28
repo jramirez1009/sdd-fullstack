@@ -67,9 +67,9 @@ rules:
       de inteligencia de negocio (de las 10 del reto) o qué filtro de la
       API la motiva
   api:
-    - Todo endpoint nuevo debe indicar explícitamente: método HTTP, ruta,
+    - "Todo endpoint nuevo debe indicar explícitamente: método HTTP, ruta,
       si requiere autenticación, parámetros de query soportados (si aplica)
-      y códigos de estado posibles
+      y códigos de estado posibles"
     - Ningún endpoint de escritura (POST/PUT/PATCH/DELETE) se genera sin su
       validación de entrada correspondiente
   frontend:
@@ -84,9 +84,9 @@ rules:
       npm run dev es suficiente; no debe pedir instalar PostgreSQL
     - .env nunca se versiona; .env.example documenta cada variable
       (incluida DATABASE_URL) sin credenciales reales
-    - La base de Supabase se entrega ya poblada: schema.sql y seed.sql
+    - "La base de Supabase se entrega ya poblada: schema.sql y seed.sql
       se ejecutan una sola vez, por el autor, antes de la entrega. El
       evaluador no necesita correr ningún script de base de datos; solo
       pega el .env y el sistema ya tiene datos reales desde el primer
       request. schema.sql y seed.sql igual se incluyen en el repo como
-      documentación reproducible del esquema, no como paso obligatorio
+      documentación reproducible del esquema, no como paso obligatorio"
