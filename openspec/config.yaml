@@ -1,32 +1,92 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Se inyecta en TODAS las generaciones de artefactos. Conciso a propósito.
+context: |
+  Lista de Tareas: aplicación web full-stack de gestión de tareas
+  (reto técnico). Entregable orientado a evaluación: código listo para
+  producción, con foco en calidad, seguridad y rendimiento.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Stack técnico (fijado; no se renegocia en propuestas):
+  - Backend: Node.js con Express.
+  - Base de datos: PostgreSQL, con consultas parametrizadas (prohibido
+    concatenar SQL) y esquema con relaciones (usuarios, categorías,
+    tareas, etiquetas, tarea_etiquetas en relación muchos a muchos).
+  - Autenticación: JWT.
+  - Acceso a datos: SQL parametrizado directo vía el driver `pg`
+    (node-postgres); sin ORM (Prisma, Sequelize, TypeORM, etc.). Ninguna
+    dependencia de ORM se acepta sin justificación escrita en design.md.
+  - Frontend: React puro (SPA) con Vite o Create React App, sin
+    meta-framework (Next.js, Remix, etc.). Hooks (useState, useEffect,
+    useContext) y Context API para el estado de autenticación. CSS
+    Modules para estilos (sin styled-components; sin frameworks de
+    utilidades como Bootstrap o Tailwind).
+  - Infraestructura de base de datos: PostgreSQL alojado en la nube
+    (Supabase), creado una sola vez por el autor del proyecto y
+    compartido vía DATABASE_URL. Quien clona el repositorio solo
+    configura su .env con esa cadena de conexión; no crea servidor ni
+    base de datos localmente. El proyecto entrega y ejecuta scripts
+    DDL/DML (schema + seed) contra esa base ya existente.
+  - Tests: no especificado por el reto, pero cualquier lógica de
+    negocio no trivial (filtros, agregaciones SQL) debe ser verificable.
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+  Principios innegociables:
+  1. Idioma: nombres de recursos, endpoints, tablas y campos en español
+     (p. ej. /api/tareas, /api/auth/registro, tabla categorias). Código
+     (variables internas, comentarios técnicos) puede ir en inglés o
+     español pero debe ser consistente dentro de cada capa.
+  2. Seguridad primero: todo endpoint protegido valida JWT; toda consulta
+     usa parámetros preparados; rate limiting activo; validación de
+     entrada en cada request antes de tocar la base de datos.
+  3. La spec es la fuente de verdad: todo cambio de comportamiento
+     observable del sistema debe entrar como cambio de OpenSpec (propuesta
+     + deltas) o regularizarse como tal. Un comportamiento que
+     openspec/specs/ no describe es un defecto, aunque el código funcione.
+  4. Diseño de base de datos con integridad: claves foráneas, restricciones
+     NOT NULL/UNIQUE donde corresponda, e índices para los filtros más
+     usados (estado, categoría, prioridad, fecha_vencimiento).
+  5. API RESTful convencional: métodos y códigos de estado HTTP correctos,
+     respuestas de error consistentes, sin filtrar detalles internos
+     (stack traces, mensajes de driver de BD) al cliente.
+
+# Reglas por artefacto: solo se inyectan al generar ese artefacto.
+rules:
+  specs:
+    - Redacta en español conservando la palabra normativa inglesa de cada
+      requisito (MUST/SHALL), p. ej. "El sistema MUST validar el JWT en
+      cada endpoint protegido"
+    - Reutiliza los términos ya definidos en las specs vivas; no introduzcas
+      sinónimos nuevos para conceptos existentes (p. ej. siempre "tarea",
+      nunca alternar con "task" o "pendiente")
+  proposal:
+    - Registra cada decisión de negocio o de alcance en proposal.md con su
+      fecha
+  design:
+    - Ninguna dependencia nueva sin justificación escrita, incluida
+      cualquier librería de acceso a datos distinta de `pg`
+    - Toda decisión de esquema de base de datos debe explicar qué consulta
+      de inteligencia de negocio (de las 10 del reto) o qué filtro de la
+      API la motiva
+  api:
+    - Todo endpoint nuevo debe indicar explícitamente: método HTTP, ruta,
+      si requiere autenticación, parámetros de query soportados (si aplica)
+      y códigos de estado posibles
+    - Ningún endpoint de escritura (POST/PUT/PATCH/DELETE) se genera sin su
+      validación de entrada correspondiente
+  frontend:
+    - Los componentes de datos (listas, formularios) usan hooks
+      personalizados en hooks/ para las llamadas a la API; no fetch/axios
+      directo dentro del componente
+    - Todo estado de carga y de error debe tener representación visual
+      explícita (usar los componentes de Comunes/)
+  entrega:
+    - El README debe dejar claro que la base de datos ya existe en la
+      nube (Supabase) y que clonar + configurar .env + npm install +
+      npm run dev es suficiente; no debe pedir instalar PostgreSQL
+    - .env nunca se versiona; .env.example documenta cada variable
+      (incluida DATABASE_URL) sin credenciales reales
+    - La base de Supabase se entrega ya poblada: schema.sql y seed.sql
+      se ejecutan una sola vez, por el autor, antes de la entrega. El
+      evaluador no necesita correr ningún script de base de datos; solo
+      pega el .env y el sistema ya tiene datos reales desde el primer
+      request. schema.sql y seed.sql igual se incluyen en el repo como
+      documentación reproducible del esquema, no como paso obligatorio
