@@ -1,0 +1,12 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno (nunca se versionan: contienen DATABASE_URL y JWT_SECRET)
+.env
+.env.local
+.env.*.local
+
+# Registros y artefactos de herramientas
+*.log
+npm-debug.log*
+.DS_Store
