@@ -32,7 +32,7 @@ La única pieza que este cambio inaugura y que el resto del proyecto heredará e
 Toda consulta de estos repositorios recibe `usuarioId` como parámetro y lo lleva en su cláusula `WHERE`, incluidas las de escritura:
 
 ```
-UPDATE categorias SET nombre = $1 WHERE id = $2 AND usuario_id = $3 RETURNING id, nombre
+UPDATE categorias SET nombre = $1 WHERE id = $2 AND usuario_id = $3 RETURNING id, nombre, creado_en
 DELETE FROM categorias WHERE id = $1 AND usuario_id = $2
 ```
 

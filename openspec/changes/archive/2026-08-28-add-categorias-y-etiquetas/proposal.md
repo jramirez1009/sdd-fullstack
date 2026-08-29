@@ -28,7 +28,7 @@ No hay cambios de ruptura: ningún endpoint ni comportamiento previo se modifica
 
 ## Impact
 
-- **Backend nuevo**: `src/rutas/categoriasRutas.js` y `src/rutas/etiquetasRutas.js`, sus controladores, y los repositorios `categoriasRepo.js` y `etiquetasRepo.js`. Montaje de ambos routers en `src/app.js` detrás de `requiereAutenticacion`.
+- **Backend nuevo**: `src/rutas/categoriasRutas.js` y `src/rutas/etiquetasRutas.js`, sus controladores, los repositorios `categoriasRepo.js` y `etiquetasRepo.js`, y el ayudante `src/utils/identificadores.js` con `parsearIdRuta`. Montaje de ambos routers en `src/app.js` detrás de `requiereAutenticacion`.
 - **Backend modificado**: `src/utils/errores.js` gana el código `NOMBRE_DUPLICADO` y su constructor; `src/utils/validacion.js` gana la validación y normalización de nombre parametrizada por longitud máxima.
 - **Base de datos**: sin cambios de esquema. Se usan las restricciones ya existentes `categorias_usuario_nombre_unico` y `etiquetas_usuario_nombre_unico` (columnas `CITEXT`, comparación insensible a mayúsculas) y la cascada de `tarea_etiquetas`.
 - **Dependencias**: ninguna nueva.
