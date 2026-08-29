@@ -88,6 +88,20 @@ CREATE TABLE IF NOT EXISTS tareas (
     completada_en     TIMESTAMPTZ
 );
 
+-- Búsqueda por texto libre sobre el contenido de la tarea.
+-- Columna generada y no disparador ni actualización desde la aplicación: una
+-- columna generada no puede quedar desincronizada del título y la descripción,
+-- por el mismo criterio que ya se aplicó a actualizado_en.
+-- La configuración 'spanish' va nombrada explícitamente (y no implícita) porque
+-- to_tsvector solo es inmutable —y por tanto admisible en una columna generada—
+-- cuando no depende del parámetro de sesión default_text_search_config. Aporta
+-- lematización e insensibilidad a acentos y a mayúsculas.
+ALTER TABLE tareas
+    ADD COLUMN IF NOT EXISTS busqueda_tsv TSVECTOR
+    GENERATED ALWAYS AS (
+        to_tsvector('spanish', coalesce(titulo, '') || ' ' || coalesce(descripcion, ''))
+    ) STORED;
+
 -- -----------------------------------------------------------------------------
 -- tarea_etiquetas (relación muchos a muchos)
 -- -----------------------------------------------------------------------------
@@ -140,6 +154,13 @@ CREATE INDEX IF NOT EXISTS tareas_usuario_prioridad_idx
 CREATE INDEX IF NOT EXISTS tareas_usuario_vencimiento_idx
     ON tareas (usuario_id, fecha_vencimiento);
 
+-- Filtro de búsqueda por texto. Es el único índice que no lleva usuario_id como
+-- primera columna: un GIN no admite una columna escalar como primera clave sin
+-- la extensión btree_gin. El planificador lo combina con el índice B-tree que ya
+-- filtra por usuario mediante un BitmapAnd, suficiente para este volumen.
+CREATE INDEX IF NOT EXISTS tareas_usuario_busqueda_idx
+    ON tareas USING GIN (busqueda_tsv);
+
 -- La clave primaria compuesta cubre la navegación tarea -> etiquetas; este
 -- índice cubre la dirección inversa (filtrar tareas por etiqueta, contar uso).
 CREATE INDEX IF NOT EXISTS tarea_etiquetas_etiqueta_idx
@@ -154,6 +175,12 @@ CREATE INDEX IF NOT EXISTS tarea_etiquetas_etiqueta_idx
 -- Destruye el esquema completo y todos sus datos. Descomentar y ejecutar a mano
 -- solo para rehacer el esquema desde cero mientras no haya datos reales.
 -- El orden es el inverso al de dependencia.
+--
+-- Para revertir solo la búsqueda por texto, sin destruir nada más (la columna es
+-- derivada: al recrearla se rellena sola, no hay pérdida de datos):
+--
+-- DROP INDEX IF EXISTS tareas_usuario_busqueda_idx;
+-- ALTER TABLE tareas DROP COLUMN IF EXISTS busqueda_tsv;
 --
 -- DROP TABLE IF EXISTS tarea_etiquetas;
 -- DROP TABLE IF EXISTS tareas;
