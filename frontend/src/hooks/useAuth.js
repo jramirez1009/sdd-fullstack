@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ContextoAuth } from '../contextos/ContextoAuth.jsx';
+import { ContextoAuth } from '../contexto/ContextoAuth.jsx';
 
 /**
  * Vía única de acceso al estado de sesión. Existe para que ningún componente

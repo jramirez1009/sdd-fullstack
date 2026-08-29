@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { RutaProtegida, RutaSoloAnonima } from './componentes/Comunes/RutaProtegida.jsx';
-import { Login } from './paginas/Login.jsx';
-import { Registro } from './paginas/Registro.jsx';
+import { FormularioLogin } from './componentes/Auth/FormularioLogin.jsx';
+import { FormularioRegistro } from './componentes/Auth/FormularioRegistro.jsx';
 import { Tareas } from './paginas/Tareas.jsx';
 
 export function App() {
@@ -11,7 +11,7 @@ export function App() {
         path="/login"
         element={(
           <RutaSoloAnonima>
-            <Login />
+            <FormularioLogin />
           </RutaSoloAnonima>
         )}
       />
@@ -19,7 +19,7 @@ export function App() {
         path="/registro"
         element={(
           <RutaSoloAnonima>
-            <Registro />
+            <FormularioRegistro />
           </RutaSoloAnonima>
         )}
       />

@@ -1,15 +1,15 @@
 import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Cargando } from '../componentes/Comunes/Cargando.jsx';
-import { MensajeError } from '../componentes/Comunes/MensajeError.jsx';
-import { useAuth } from '../hooks/useAuth.js';
-import { ErrorApi } from '../servicios/api.js';
+import { Cargando } from '../Comunes/Cargando.jsx';
+import { MensajeError } from '../Comunes/MensajeError.jsx';
+import { useAuth } from '../../hooks/useAuth.js';
+import { ErrorApi } from '../../servicios/api.js';
 import {
   LONGITUD_MAXIMA_PASSWORD,
   LONGITUD_MINIMA_PASSWORD,
   validarRegistro,
-} from '../servicios/validacion.js';
-import estilos from './Registro.module.css';
+} from '../../servicios/validacion.js';
+import estilos from './FormularioRegistro.module.css';
 
 /** Igual que en la pantalla de inicio de sesión: se decide por el código. */
 const MENSAJES = {
@@ -31,7 +31,7 @@ function mensajeDe(error) {
   return MENSAJES[error.codigo] ?? error.mensaje;
 }
 
-export function Registro() {
+export function FormularioRegistro() {
   const { registrar } = useAuth();
   const navegar = useNavigate();
 

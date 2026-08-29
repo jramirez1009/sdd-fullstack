@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Cargando } from '../componentes/Comunes/Cargando.jsx';
-import { MensajeError } from '../componentes/Comunes/MensajeError.jsx';
-import { MOTIVO_CIERRE } from '../contextos/ContextoAuth.jsx';
-import { useAuth } from '../hooks/useAuth.js';
-import { ErrorApi } from '../servicios/api.js';
-import { validarLogin } from '../servicios/validacion.js';
-import estilos from './Login.module.css';
+import { Cargando } from '../Comunes/Cargando.jsx';
+import { MensajeError } from '../Comunes/MensajeError.jsx';
+import { MOTIVO_CIERRE } from '../../contexto/ContextoAuth.jsx';
+import { useAuth } from '../../hooks/useAuth.js';
+import { ErrorApi } from '../../servicios/api.js';
+import { validarLogin } from '../../servicios/validacion.js';
+import estilos from './FormularioLogin.module.css';
 
 /**
  * Mensajes por código de error estable, nunca por el texto de la respuesta: así
@@ -28,7 +28,7 @@ function mensajeDe(error) {
   return MENSAJES[error.codigo] ?? error.mensaje;
 }
 
-export function Login() {
+export function FormularioLogin() {
   const { iniciarSesion, motivoCierre, limpiarMotivoCierre } = useAuth();
   const navegar = useNavigate();
 

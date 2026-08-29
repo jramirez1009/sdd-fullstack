@@ -66,6 +66,12 @@ rules:
     - Toda decisión de esquema de base de datos debe explicar qué consulta
       de inteligencia de negocio (de las 10 del reto) o qué filtro de la
       API la motiva
+    - "Todo design.md que introduzca piezas de frontend debe declarar la
+      ubicación literal de cada una según el árbol del reto: componentes en
+      `componentes/<Recurso>/`, hooks personalizados en `hooks/`, clientes de
+      API en `servicios/`, estado compartido en `contexto/` (singular) y
+      utilidades en `utils/`. No se admite una capa intermedia de `paginas/`
+      para formularios ni carpetas en plural que se aparten de esos nombres"
   api:
     - "Todo endpoint nuevo debe indicar explícitamente: método HTTP, ruta,
       si requiere autenticación, parámetros de query soportados (si aplica)
