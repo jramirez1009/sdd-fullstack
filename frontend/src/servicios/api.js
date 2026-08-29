@@ -174,3 +174,27 @@ export function login(email, password) {
 export function perfil() {
   return peticion('/api/auth/perfil', { esAutenticacion: true });
 }
+
+// -----------------------------------------------------------------------------
+// Categorías
+// -----------------------------------------------------------------------------
+
+/** GET /api/categorias → array de { id, nombre, fecha_creacion }, ordenado por nombre. */
+export function listarCategorias() {
+  return peticion('/api/categorias');
+}
+
+/** POST /api/categorias { nombre } → 201 con la categoría. */
+export function crearCategoria(nombre) {
+  return peticion('/api/categorias', { metodo: 'POST', cuerpo: { nombre } });
+}
+
+/** PUT /api/categorias/:id { nombre } → 200 con la categoría. */
+export function editarCategoria(id, nombre) {
+  return peticion(`/api/categorias/${id}`, { metodo: 'PUT', cuerpo: { nombre } });
+}
+
+/** DELETE /api/categorias/:id → 204 sin cuerpo; `peticion` devuelve null. */
+export function eliminarCategoria(id) {
+  return peticion(`/api/categorias/${id}`, { metodo: 'DELETE' });
+}

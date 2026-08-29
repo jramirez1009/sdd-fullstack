@@ -4,6 +4,7 @@ import { FormularioLogin } from './componentes/Auth/FormularioLogin.jsx';
 import { FormularioRegistro } from './componentes/Auth/FormularioRegistro.jsx';
 import { Layout } from './componentes/Layout/Layout.jsx';
 import { Tareas } from './paginas/Tareas.jsx';
+import { ListaCategorias } from './componentes/Categoria/ListaCategorias.jsx';
 
 export function App() {
   return (
@@ -22,7 +23,8 @@ export function App() {
         )}
       >
         <Route path="/tareas" element={<Tareas />} />
-        {/* categorías, etiquetas… en cambios posteriores */}
+        <Route path="/categorias" element={<ListaCategorias />} />
+        {/* etiquetas… en cambios posteriores */}
       </Route>
 
       <Route
