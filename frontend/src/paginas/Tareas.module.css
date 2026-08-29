@@ -1,42 +1,13 @@
 .pantalla {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: var(--espacio-5) var(--espacio-4);
-}
-
-.cabecera {
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: column;
   gap: var(--espacio-4);
-  padding-bottom: var(--espacio-4);
-  border-bottom: 1px solid var(--color-borde);
 }
 
 .titulo {
   font-size: var(--texto-grande);
 }
 
-.saludo {
-  color: var(--color-texto-suave);
-  font-size: var(--texto-pequeno);
-}
-
-.boton {
-  padding: var(--espacio-2) var(--espacio-3);
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  background-color: var(--color-superficie);
-  cursor: pointer;
-}
-
-.boton:hover {
-  border-color: var(--color-primario);
-  color: var(--color-primario);
-}
-
 .pendiente {
-  margin-top: var(--espacio-5);
   color: var(--color-texto-suave);
 }

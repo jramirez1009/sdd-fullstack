@@ -1,0 +1,78 @@
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espacio-4);
+  padding: var(--espacio-3) var(--espacio-4);
+  background-color: var(--color-superficie);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.izquierda,
+.derecha {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-3);
+  min-width: 0;
+}
+
+.marca {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.identidad {
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.botonMenu {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+  cursor: pointer;
+}
+
+.iconoMenu {
+  width: 1rem;
+  height: 2px;
+  background-color: currentColor;
+  box-shadow: 0 -5px 0 currentColor, 0 5px 0 currentColor;
+}
+
+.botonSalir {
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.botonSalir:hover {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+
+/* Por encima del punto de corte el sidebar es permanente: el botón de menú
+   sobra. */
+/* En pantalla estrecha el botón de menú ancla la cabecera; la marca cede su
+   sitio para que la identidad quepa sin romper en varias líneas. */
+@media (max-width: 47.999rem) {
+  .marca {
+    display: none;
+  }
+}
+
+@media (min-width: 48rem) {
+  .botonMenu {
+    display: none;
+  }
+}

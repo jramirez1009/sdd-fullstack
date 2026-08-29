@@ -1,0 +1,60 @@
+.pantalla {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--espacio-4);
+}
+
+.tarjeta {
+  width: 100%;
+  max-width: 28rem;
+  padding: var(--espacio-6);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+  box-shadow: var(--sombra);
+  text-align: center;
+}
+
+.titulo {
+  font-size: var(--texto-grande);
+  margin-bottom: var(--espacio-3);
+}
+
+.texto {
+  color: var(--color-texto-suave);
+  margin-bottom: var(--espacio-5);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espacio-3);
+}
+
+.boton {
+  padding: var(--espacio-2) var(--espacio-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+  cursor: pointer;
+}
+
+.boton:hover {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+
+.botonPrimario {
+  composes: boton;
+  border-color: var(--color-primario);
+  background-color: var(--color-primario);
+  color: var(--color-primario-contraste);
+}
+
+.botonPrimario:hover {
+  background-color: var(--color-primario-oscuro);
+  color: var(--color-primario-contraste);
+}

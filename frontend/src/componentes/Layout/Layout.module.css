@@ -1,0 +1,74 @@
+.armazon {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.cuerpo {
+  position: relative;
+  flex: 1;
+}
+
+/* Panel de navegación: por debajo del punto de corte es un panel superpuesto,
+   fuera del flujo, oculto hasta que se abre. */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 16rem;
+  max-width: 80vw;
+  height: 100%;
+  padding: var(--espacio-4);
+  background-color: var(--color-superficie);
+  border-right: 1px solid var(--color-borde);
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
+}
+
+.sidebarAbierto {
+  transform: translateX(0);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.contenido {
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: var(--espacio-5) var(--espacio-4);
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
+  }
+}
+
+/* Punto de corte único: por encima, rejilla de dos columnas con el sidebar
+   siempre visible. */
+@media (min-width: 48rem) {
+  .cuerpo {
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    width: auto;
+    max-width: none;
+    height: auto;
+    transform: none;
+    transition: none;
+  }
+
+  .backdrop {
+    display: none;
+  }
+}

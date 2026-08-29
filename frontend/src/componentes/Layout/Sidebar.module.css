@@ -1,0 +1,33 @@
+.navegacion {
+  width: 100%;
+}
+
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+}
+
+.enlace {
+  display: block;
+  padding: var(--espacio-2) var(--espacio-3);
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  text-decoration: none;
+}
+
+.enlace:hover {
+  background-color: var(--color-fondo);
+}
+
+.enlaceActivo {
+  background-color: var(--color-primario);
+  color: var(--color-primario-contraste);
+}
+
+.enlaceActivo:hover {
+  background-color: var(--color-primario-oscuro);
+}
