@@ -1,0 +1,101 @@
+/*
+ * Reset mínimo y paleta compartida. Las variables viven aquí y no en cada
+ * módulo CSS para que las pantallas de los cambios siguientes no reinventen los
+ * colores ni el espaciado.
+ */
+
+:root {
+  /* Color */
+  --color-fondo: #f4f5f7;
+  --color-superficie: #ffffff;
+  --color-borde: #d5d8dd;
+  --color-texto: #1c1f24;
+  --color-texto-suave: #5a6069;
+  --color-primario: #2f5bd7;
+  --color-primario-oscuro: #23459f;
+  --color-primario-contraste: #ffffff;
+  /* Contraste comprobado sobre --color-superficie y sobre --color-error-fondo. */
+  --color-error: #a3131f;
+  --color-error-fondo: #fdecec;
+  --color-error-borde: #f2b8b8;
+  --color-aviso: #7a4a06;
+  --color-aviso-fondo: #fdf3e0;
+  --color-aviso-borde: #f0d5a6;
+  --color-foco: #2f5bd7;
+
+  /* Espaciado */
+  --espacio-1: 0.25rem;
+  --espacio-2: 0.5rem;
+  --espacio-3: 0.75rem;
+  --espacio-4: 1rem;
+  --espacio-5: 1.5rem;
+  --espacio-6: 2rem;
+
+  /* Tipografía */
+  --fuente-base: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --texto-pequeno: 0.875rem;
+  --texto-base: 1rem;
+  --texto-grande: 1.375rem;
+
+  /* Formas */
+  --radio: 6px;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-base);
+  font-size: var(--texto-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--color-primario);
+}
+
+/* El foco visible no se elimina en ningún sitio: la navegación con teclado es
+   parte del comportamiento especificado. */
+:focus-visible {
+  outline: 2px solid var(--color-foco);
+  outline-offset: 2px;
+}

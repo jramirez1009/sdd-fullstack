@@ -1,0 +1,36 @@
+.contenedor {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.pantallaCompleta {
+  composes: contenedor;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.indicador {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--color-borde);
+  border-top-color: var(--color-primario);
+  border-radius: 50%;
+  animation: giro 0.7s linear infinite;
+}
+
+@keyframes giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Quien pide movimiento reducido ve el indicador quieto, no ve desaparecer el
+   estado de carga. */
+@media (prefers-reduced-motion: reduce) {
+  .indicador {
+    animation: none;
+  }
+}

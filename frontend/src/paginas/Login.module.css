@@ -1,0 +1,14 @@
+.pantalla { composes: pantalla from '../estilos/formulario.module.css'; }
+.tarjeta { composes: tarjeta from '../estilos/formulario.module.css'; }
+.titulo { composes: titulo from '../estilos/formulario.module.css'; }
+.introduccion { composes: introduccion from '../estilos/formulario.module.css'; }
+.formulario { composes: formulario from '../estilos/formulario.module.css'; }
+.campo { composes: campo from '../estilos/formulario.module.css'; }
+.etiqueta { composes: etiqueta from '../estilos/formulario.module.css'; }
+.entrada { composes: entrada from '../estilos/formulario.module.css'; }
+.entradaInvalida { composes: entradaInvalida from '../estilos/formulario.module.css'; }
+.ayuda { composes: ayuda from '../estilos/formulario.module.css'; }
+.errorCampo { composes: errorCampo from '../estilos/formulario.module.css'; }
+.boton { composes: boton from '../estilos/formulario.module.css'; }
+.pie { composes: pie from '../estilos/formulario.module.css'; }
+.zonaEstado { composes: zonaEstado from '../estilos/formulario.module.css'; }
