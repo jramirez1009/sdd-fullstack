@@ -3,7 +3,7 @@ import { RutaProtegida, RutaSoloAnonima } from './componentes/Comunes/RutaProteg
 import { FormularioLogin } from './componentes/Auth/FormularioLogin.jsx';
 import { FormularioRegistro } from './componentes/Auth/FormularioRegistro.jsx';
 import { Layout } from './componentes/Layout/Layout.jsx';
-import { Tareas } from './paginas/Tareas.jsx';
+import { ListaTareas } from './componentes/Tarea/ListaTareas.jsx';
 import { ListaCategorias } from './componentes/Categoria/ListaCategorias.jsx';
 
 export function App() {
@@ -22,7 +22,7 @@ export function App() {
           </RutaProtegida>
         )}
       >
-        <Route path="/tareas" element={<Tareas />} />
+        <Route path="/tareas" element={<ListaTareas />} />
         <Route path="/categorias" element={<ListaCategorias />} />
         {/* etiquetas… en cambios posteriores */}
       </Route>

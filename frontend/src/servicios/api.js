@@ -198,3 +198,79 @@ export function editarCategoria(id, nombre) {
 export function eliminarCategoria(id) {
   return peticion(`/api/categorias/${id}`, { metodo: 'DELETE' });
 }
+
+// -----------------------------------------------------------------------------
+// Tareas
+// -----------------------------------------------------------------------------
+
+/**
+ * Construye la query string de `GET /api/tareas` a partir del objeto de filtros
+ * ya normalizado a los nombres de parámetro del backend. Las claves de valor
+ * neutro (`undefined`, `null`, `''`, lista vacía) se omiten. La lista
+ * `etiquetas` se serializa como una entrada repetida por nombre
+ * (`etiquetas=casa&etiquetas=urgente`), que es lo que espera el parser del
+ * backend (`validarConsultaTareas`).
+ */
+function construirQueryTareas(filtros = {}) {
+  const params = new URLSearchParams();
+
+  for (const [clave, valor] of Object.entries(filtros)) {
+    if (valor === undefined || valor === null || valor === '') {
+      continue;
+    }
+    if (clave === 'etiquetas') {
+      for (const nombre of valor) {
+        if (nombre !== undefined && nombre !== null && `${nombre}`.trim() !== '') {
+          params.append('etiquetas', nombre);
+        }
+      }
+      continue;
+    }
+    params.append(clave, typeof valor === 'boolean' ? String(valor) : valor);
+  }
+
+  const cadena = params.toString();
+  return cadena === '' ? '' : `?${cadena}`;
+}
+
+/** GET /api/tareas?<query> → array de tareas del usuario. */
+export function listarTareas(filtros) {
+  return peticion(`/api/tareas${construirQueryTareas(filtros)}`);
+}
+
+/** POST /api/tareas → 201 con la tarea. `datos`: { titulo, descripcion?, prioridad?, fecha_vencimiento?, categoria_id?, etiquetas? }. */
+export function crearTarea(datos) {
+  return peticion('/api/tareas', { metodo: 'POST', cuerpo: datos });
+}
+
+/** PUT /api/tareas/:id → 200 con la tarea. */
+export function editarTarea(id, datos) {
+  return peticion(`/api/tareas/${id}`, { metodo: 'PUT', cuerpo: datos });
+}
+
+/** PATCH /api/tareas/:id/completar { completada } → 200 con la tarea. Idempotente. */
+export function cambiarCompletada(id, done) {
+  return peticion(`/api/tareas/${id}/completar`, {
+    metodo: 'PATCH',
+    cuerpo: { completada: done },
+  });
+}
+
+/** DELETE /api/tareas/:id → 204 sin cuerpo; `peticion` devuelve null. */
+export function eliminarTarea(id) {
+  return peticion(`/api/tareas/${id}`, { metodo: 'DELETE' });
+}
+
+// -----------------------------------------------------------------------------
+// Etiquetas
+// -----------------------------------------------------------------------------
+
+/** GET /api/etiquetas → array de { id, nombre, creado_en }, ordenado por nombre. */
+export function listarEtiquetas() {
+  return peticion('/api/etiquetas');
+}
+
+/** POST /api/etiquetas { nombre } → 201 con la etiqueta. `409 NOMBRE_DUPLICADO` si ya existe. */
+export function crearEtiqueta(nombre) {
+  return peticion('/api/etiquetas', { metodo: 'POST', cuerpo: { nombre } });
+}

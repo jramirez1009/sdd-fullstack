@@ -3,7 +3,7 @@ import { Cargando } from '../Comunes/Cargando.jsx';
 import { MensajeError } from '../Comunes/MensajeError.jsx';
 import { useCategorias } from '../../hooks/useCategorias.js';
 import { FormularioCategoria } from './FormularioCategoria.jsx';
-import { DialogoConfirmarBorrado } from './DialogoConfirmarBorrado.jsx';
+import { DialogoConfirmarBorrado } from '../Comunes/DialogoConfirmarBorrado.jsx';
 import { ErrorApi } from '../../servicios/api.js';
 import estilos from './ListaCategorias.module.css';
 
@@ -107,9 +107,17 @@ export function ListaCategorias() {
 
       {aEliminar && (
         <DialogoConfirmarBorrado
-          categoria={aEliminar}
-          alConfirmar={async (id) => {
-            await eliminar(id);
+          titulo="Eliminar categoría"
+          descripcion={(
+            <>
+              Se eliminará la categoría <strong>{aEliminar.nombre}</strong>. Las
+              tareas asociadas no se borran: quedarán sin categoría.
+            </>
+          )}
+          etiquetaConfirmar="Eliminar"
+          etiquetaEnCurso="Eliminando…"
+          alConfirmar={async () => {
+            await eliminar(aEliminar.id);
             setAEliminar(null);
           }}
           alCancelar={() => setAEliminar(null)}

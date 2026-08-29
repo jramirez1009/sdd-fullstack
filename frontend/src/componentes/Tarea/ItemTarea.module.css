@@ -1,0 +1,116 @@
+.fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espacio-2);
+  padding: var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+}
+
+.filaCompletada {
+  composes: fila;
+  opacity: 0.7;
+}
+
+.filaCompletada .titulo {
+  text-decoration: line-through;
+}
+
+.principal {
+  display: flex;
+  gap: var(--espacio-2);
+  align-items: flex-start;
+  flex: 1 1 15rem;
+}
+
+.check {
+  margin-top: 0.2rem;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: none;
+}
+
+.cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  min-width: 0;
+}
+
+.titulo {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+  align-items: center;
+  color: var(--color-texto-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.prioridad {
+  text-transform: capitalize;
+}
+
+.chipCategoria {
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio);
+  background-color: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  color: var(--color-texto);
+}
+
+.etiquetas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-1);
+}
+
+.chipEtiqueta {
+  padding: var(--espacio-1) var(--espacio-2);
+  border-radius: var(--radio);
+  background-color: var(--color-fondo);
+  border: 1px solid var(--color-borde);
+  font-size: var(--texto-pequeno);
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+}
+
+.botonSecundario {
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+  color: var(--color-texto);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botonSecundario:hover {
+  background-color: var(--color-fondo);
+}
+
+.oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

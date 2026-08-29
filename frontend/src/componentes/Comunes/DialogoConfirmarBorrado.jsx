@@ -1,21 +1,31 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { Cargando } from '../Comunes/Cargando.jsx';
-import { MensajeError } from '../Comunes/MensajeError.jsx';
+import { Cargando } from './Cargando.jsx';
+import { MensajeError } from './MensajeError.jsx';
 import { ErrorApi } from '../../servicios/api.js';
 import estilos from './DialogoConfirmarBorrado.module.css';
 
 const SELECTOR_FOCO = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 /**
- * Confirmación de borrado de una categoría. No usa `window.confirm`: necesita el
- * texto accesible sobre el efecto en las tareas y encajar con CSS Modules.
+ * Confirmación de borrado genérica. No usa `window.confirm`: necesita texto
+ * accesible propio del recurso y encajar con CSS Modules. El texto llega por
+ * props (`titulo`, `descripcion`, `etiquetaConfirmar`, `etiquetaEnCurso`), de
+ * modo que el componente no se acopla a ningún recurso concreto.
  *
  * `Esc` y "Cancelar" cierran sin llamar a la API. Al confirmar se invoca
- * `alConfirmar(id)`; mientras la promesa está pendiente el botón "Eliminar"
- * queda deshabilitado y se muestra `<Cargando>`. Si rechaza, el motivo se
- * muestra con `<MensajeError>` y se puede reintentar.
+ * `alConfirmar()` (sin argumentos: el llamador ya cierra sobre el id/recurso);
+ * mientras la promesa está pendiente el botón de confirmar queda deshabilitado
+ * y se muestra `<Cargando>`. Si rechaza, el motivo se muestra con
+ * `<MensajeError>` y se puede reintentar.
  */
-export function DialogoConfirmarBorrado({ categoria, alConfirmar, alCancelar }) {
+export function DialogoConfirmarBorrado({
+  titulo,
+  descripcion,
+  etiquetaConfirmar = 'Eliminar',
+  etiquetaEnCurso = 'Eliminando…',
+  alConfirmar,
+  alCancelar,
+}) {
   const [eliminando, setEliminando] = useState(false);
   const [error, setError] = useState(null);
   const enVuelo = useRef(false);
@@ -71,12 +81,12 @@ export function DialogoConfirmarBorrado({ categoria, alConfirmar, alCancelar }) 
     setEliminando(true);
     setError(null);
     try {
-      await alConfirmar(categoria.id);
+      await alConfirmar();
       // El contenedor cierra el diálogo al reconciliarse la lista.
     } catch (err) {
       setError(err instanceof ErrorApi
         ? err.mensaje
-        : 'No se ha podido eliminar la categoría. Inténtalo de nuevo.');
+        : 'No se ha podido completar la operación. Inténtalo de nuevo.');
     } finally {
       enVuelo.current = false;
       setEliminando(false);
@@ -94,10 +104,9 @@ export function DialogoConfirmarBorrado({ categoria, alConfirmar, alCancelar }) 
         aria-describedby={idDescripcion}
         onClick={(evento) => evento.stopPropagation()}
       >
-        <h2 className={estilos.titulo} id={idTitulo}>Eliminar categoría</h2>
+        <h2 className={estilos.titulo} id={idTitulo}>{titulo}</h2>
         <p className={estilos.descripcion} id={idDescripcion}>
-          Se eliminará la categoría <strong>{categoria.nombre}</strong>. Las tareas
-          asociadas no se borran: quedarán sin categoría.
+          {descripcion}
         </p>
 
         <MensajeError>{error}</MensajeError>
@@ -109,7 +118,7 @@ export function DialogoConfirmarBorrado({ categoria, alConfirmar, alCancelar }) 
             onClick={confirmar}
             disabled={eliminando}
           >
-            {eliminando ? 'Eliminando…' : 'Eliminar'}
+            {eliminando ? etiquetaEnCurso : etiquetaConfirmar}
           </button>
           <button
             className={estilos.botonSecundario}
@@ -121,7 +130,7 @@ export function DialogoConfirmarBorrado({ categoria, alConfirmar, alCancelar }) 
           </button>
         </div>
 
-        {eliminando && <Cargando texto="Eliminando…" />}
+        {eliminando && <Cargando texto={etiquetaEnCurso} />}
       </div>
     </div>
   );

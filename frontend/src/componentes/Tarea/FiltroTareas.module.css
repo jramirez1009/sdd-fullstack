@@ -1,0 +1,55 @@
+.panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+  padding: var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-1);
+  min-width: 9rem;
+}
+
+.etiqueta {
+  font-size: var(--texto-pequeno);
+  font-weight: 600;
+}
+
+.control {
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+}
+
+.control:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.etiquetasCampo {
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  padding: var(--espacio-2) var(--espacio-3);
+  margin: 0;
+  flex-basis: 100%;
+}
+
+.listaEtiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+  margin-top: var(--espacio-1);
+}
+
+.opcionEtiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-1);
+  font-size: var(--texto-pequeno);
+}
