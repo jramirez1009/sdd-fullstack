@@ -9,7 +9,9 @@ export const CODIGOS_ERROR = {
   CREDENCIALES_INVALIDAS: 'CREDENCIALES_INVALIDAS',
   NO_AUTENTICADO: 'NO_AUTENTICADO',
   NOMBRE_DUPLICADO: 'NOMBRE_DUPLICADO',
+  REFERENCIA_INVALIDA: 'REFERENCIA_INVALIDA',
   NO_ENCONTRADO: 'NO_ENCONTRADO',
+  DEMASIADAS_PETICIONES: 'DEMASIADAS_PETICIONES',
   ERROR_INTERNO: 'ERROR_INTERNO',
 };
 
@@ -58,10 +60,42 @@ export function errorNombreDuplicado(recurso) {
   );
 }
 
+/**
+ * El cuerpo de la petición referencia una categoría o una etiqueta que no
+ * pertenece al usuario. Es 400 y no 404 porque el problema está en un dato del
+ * cuerpo, no en el recurso que la ruta direcciona.
+ *
+ * El mensaje es deliberadamente el mismo tanto si la referencia no existe como
+ * si es de otro usuario: distinguirlas revelaría la existencia de datos ajenos.
+ * Tampoco menciona ninguna tabla ni restricción.
+ */
+export function errorReferenciaInvalida(recurso) {
+  return new ErrorAplicacion(
+    400,
+    CODIGOS_ERROR.REFERENCIA_INVALIDA,
+    'Alguno de los elementos referenciados no está disponible.',
+    { recurso },
+  );
+}
+
 export function errorNoAutenticado(mensaje = 'Se requiere autenticación para acceder a este recurso.') {
   return new ErrorAplicacion(401, CODIGOS_ERROR.NO_AUTENTICADO, mensaje);
 }
 
 export function errorNoEncontrado(mensaje = 'El recurso solicitado no existe.') {
   return new ErrorAplicacion(404, CODIGOS_ERROR.NO_ENCONTRADO, mensaje);
+}
+
+/**
+ * Se ha superado un límite de peticiones. El mensaje es deliberadamente
+ * genérico: no menciona el inicio de sesión ni ninguna cifra, de modo que sirva
+ * igual para el límite general y para el reforzado y no permita deducir cuál de
+ * los dos se superó ni en qué estado están los contadores.
+ */
+export function errorDemasiadasPeticiones() {
+  return new ErrorAplicacion(
+    429,
+    CODIGOS_ERROR.DEMASIADAS_PETICIONES,
+    'Has realizado demasiadas peticiones. Espera un momento antes de volver a intentarlo.',
+  );
 }
