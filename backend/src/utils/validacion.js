@@ -5,6 +5,9 @@ const LONGITUD_MINIMA_PASSWORD = 8;
 const LONGITUD_MAXIMA_PASSWORD = 72;
 const LONGITUD_MAXIMA_NOMBRE = 100;
 const LONGITUD_MAXIMA_EMAIL = 254;
+// Espejo exacto de los CHECK del esquema: categorias 1-100, etiquetas 1-50.
+const LONGITUD_MAXIMA_NOMBRE_CATEGORIA = 100;
+const LONGITUD_MAXIMA_NOMBRE_ETIQUETA = 50;
 
 // Comprobación de forma, no de existencia: parte local, arroba, dominio con al
 // menos un punto y sin espacios.
@@ -112,4 +115,59 @@ export function validarPassword(password) {
   return null;
 }
 
-export { LONGITUD_MINIMA_PASSWORD, LONGITUD_MAXIMA_PASSWORD, LONGITUD_MAXIMA_NOMBRE };
+
+// Caracteres de control C0 y C1, incluidos el salto de línea y la tabulación. Un
+// nombre es una etiqueta de una línea: un carácter de control ahí solo puede
+// llegar por un pegado accidental o por un intento de ensuciar los registros.
+const PATRON_CARACTERES_CONTROL = /\p{Cc}/u;
+
+/**
+ * Valida y normaliza el nombre de una categoría o de una etiqueta.
+ *
+ * La longitud se cuenta en puntos de código, no con `.length`, porque el CHECK
+ * del esquema usa `char_length`: un emoji cuenta 1 en la base y 2 en UTF-16, así
+ * que contar con `.length` rechazaría con 400 nombres que la base sí admite.
+ *
+ * La normalización a NFC es lo que impide que "café" compuesto y descompuesto
+ * convivan como dos filas distintas: son cadenas diferentes para la restricción
+ * UNIQUE, pero idénticas en pantalla.
+ *
+ * Devuelve { valido, detalles, datos } como el resto de validaciones.
+ */
+export function validarNombre(cuerpo, longitudMaxima) {
+  const entrada = cuerpo ?? {};
+  const detalles = {};
+  let nombre = null;
+
+  if (entrada.nombre === undefined || entrada.nombre === null) {
+    detalles.nombre = 'El nombre es obligatorio.';
+  } else if (typeof entrada.nombre !== 'string') {
+    // Se distingue de la ausencia, como ya hace validarRegistro: quien envía un
+    // número no ha olvidado el campo, lo ha enviado con el tipo equivocado.
+    detalles.nombre = 'El nombre debe ser texto.';
+  } else if (PATRON_CARACTERES_CONTROL.test(entrada.nombre)) {
+    detalles.nombre = 'El nombre no puede contener saltos de línea ni caracteres de control.';
+  } else {
+    // Se recortan los extremos y se conservan los espacios interiores: reescribir
+    // en silencio lo que alguien teclea es peor que respetarlo.
+    const recortado = entrada.nombre.trim().normalize('NFC');
+    if (recortado === '') {
+      detalles.nombre = 'El nombre es obligatorio.';
+    } else if ([...recortado].length > longitudMaxima) {
+      detalles.nombre = `El nombre no puede superar los ${longitudMaxima} caracteres.`;
+    } else {
+      nombre = recortado;
+    }
+  }
+
+  const valido = Object.keys(detalles).length === 0;
+  return { valido, detalles, datos: valido ? { nombre } : null };
+}
+
+export {
+  LONGITUD_MINIMA_PASSWORD,
+  LONGITUD_MAXIMA_PASSWORD,
+  LONGITUD_MAXIMA_NOMBRE,
+  LONGITUD_MAXIMA_NOMBRE_CATEGORIA,
+  LONGITUD_MAXIMA_NOMBRE_ETIQUETA,
+};

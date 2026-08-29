@@ -8,6 +8,7 @@ export const CODIGOS_ERROR = {
   EMAIL_DUPLICADO: 'EMAIL_DUPLICADO',
   CREDENCIALES_INVALIDAS: 'CREDENCIALES_INVALIDAS',
   NO_AUTENTICADO: 'NO_AUTENTICADO',
+  NOMBRE_DUPLICADO: 'NOMBRE_DUPLICADO',
   NO_ENCONTRADO: 'NO_ENCONTRADO',
   ERROR_INTERNO: 'ERROR_INTERNO',
 };
@@ -40,6 +41,21 @@ export function errorEmailDuplicado() {
 export function errorCredencialesInvalidas() {
   // Mensaje deliberadamente genérico: no debe revelar si el email existe.
   return new ErrorAplicacion(401, CODIGOS_ERROR.CREDENCIALES_INVALIDAS, 'Email o contraseña incorrectos.');
+}
+
+/**
+ * Nombre ya usado por el mismo usuario en ese recurso. `recurso` viaja en
+ * `detalles` y no en el código: la reacción del frontend es la misma para
+ * categorías y etiquetas, así que un código por recurso solo engordaría el
+ * catálogo. El mensaje no menciona la restricción ni la tabla que lo detectó.
+ */
+export function errorNombreDuplicado(recurso) {
+  return new ErrorAplicacion(
+    409,
+    CODIGOS_ERROR.NOMBRE_DUPLICADO,
+    'Ya tienes un elemento con ese nombre.',
+    { recurso },
+  );
 }
 
 export function errorNoAutenticado(mensaje = 'Se requiere autenticación para acceder a este recurso.') {
