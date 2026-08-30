@@ -2,6 +2,7 @@ import {
   insertarUsuario,
   buscarUsuarioPorEmailConHash,
   buscarUsuarioPorId,
+  actualizarUltimoLogin,
 } from '../repositorios/usuariosRepo.js';
 import { hashearPassword, compararPassword } from '../utils/password.js';
 import { emitirToken } from '../utils/jwt.js';
@@ -72,6 +73,20 @@ export async function login(req, res, siguiente) {
       throw errorCredencialesInvalidas();
     }
 
+    // Efecto secundario del login exitoso: se registra el instante como último
+    // inicio de sesión. Un fallo de esta escritura se anota en el servidor pero
+    // no altera la respuesta: la identidad ya está establecida y el dato es
+    // accesorio. Un login fallido nunca llega hasta aquí, así que su
+    // ultimo_login queda intacto.
+    try {
+      await actualizarUltimoLogin(usuario.id);
+    } catch (error) {
+      console.error(
+        `No se pudo actualizar ultimo_login del usuario ${usuario.id}:`,
+        error,
+      );
+    }
+
     const token = emitirToken({ id: usuario.id, email: usuario.email });
 
     // La respuesta se construye campo a campo: el hash traído por la consulta de
@@ -106,6 +121,10 @@ export async function perfil(req, res, siguiente) {
       email: usuario.email,
       nombre: usuario.nombre,
       creado_en: usuario.creado_en,
+      // NULL mientras el usuario nunca haya iniciado sesión con éxito. Solo se
+      // expone aquí, sobre el propio token; ninguna consulta de listado o
+      // agregación de usuarios selecciona esta columna.
+      ultimo_login: usuario.ultimo_login ?? null,
     });
   } catch (error) {
     siguiente(error);

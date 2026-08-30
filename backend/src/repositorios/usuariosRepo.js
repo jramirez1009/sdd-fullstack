@@ -6,7 +6,7 @@ import { consultar } from '../config/bd.js';
 
 // Lista explícita de columnas públicas. No se usa SELECT * para después borrar
 // el hash: una lista explícita no puede olvidarse de eliminar nada.
-const COLUMNAS_PUBLICAS = 'id, email, nombre, creado_en';
+const COLUMNAS_PUBLICAS = 'id, email, nombre, creado_en, ultimo_login';
 
 /**
  * Inserta un usuario y devuelve sus datos públicos. La violación de la
@@ -50,6 +50,19 @@ export async function buscarUsuarioPorId(id) {
     [id],
   );
   return rows[0] ?? null;
+}
+
+/**
+ * Registra el instante actual como último inicio de sesión del usuario. Se llama
+ * solo tras validar las credenciales de un login exitoso. Es un efecto
+ * secundario del login: quien llama no debe encadenar el éxito de la petición a
+ * esta escritura (ver `authControlador.login`).
+ */
+export async function actualizarUltimoLogin(id) {
+  await consultar(
+    `UPDATE usuarios SET ultimo_login = NOW() WHERE id = $1`,
+    [id],
+  );
 }
 
 export { COLUMNAS_PUBLICAS };

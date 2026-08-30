@@ -25,8 +25,18 @@ CREATE TABLE IF NOT EXISTS usuarios (
     -- vacía: sería un tercer estado indistinguible de "sin nombre".
     nombre        TEXT        CONSTRAINT usuarios_nombre_longitud
                               CHECK (nombre IS NULL OR char_length(nombre) BETWEEN 1 AND 100),
-    creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    creado_en     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    -- Instante del último inicio de sesión exitoso. Nullable y sin DEFAULT: un
+    -- alta no es un login, y NULL ("nunca ha iniciado sesión") no debe
+    -- confundirse con una fecha real. Lo consume la pregunta de inteligencia de
+    -- negocio sobre "usuarios activos en los últimos 7 días".
+    ultimo_login  TIMESTAMPTZ
 );
+
+-- Alta de ultimo_login sobre una base ya existente (mismo criterio idempotente
+-- que busqueda_tsv): las filas previas quedan con NULL, que es el estado correcto.
+ALTER TABLE usuarios
+    ADD COLUMN IF NOT EXISTS ultimo_login TIMESTAMPTZ;
 
 -- -----------------------------------------------------------------------------
 -- categorias
@@ -181,6 +191,10 @@ CREATE INDEX IF NOT EXISTS tarea_etiquetas_etiqueta_idx
 --
 -- DROP INDEX IF EXISTS tareas_usuario_busqueda_idx;
 -- ALTER TABLE tareas DROP COLUMN IF EXISTS busqueda_tsv;
+--
+-- Para revertir solo el registro del último inicio de sesión:
+--
+-- ALTER TABLE usuarios DROP COLUMN IF EXISTS ultimo_login;
 --
 -- DROP TABLE IF EXISTS tarea_etiquetas;
 -- DROP TABLE IF EXISTS tareas;
