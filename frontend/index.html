@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lista de Tareas</title>
+    <script>
+      // Aplica el tema antes del primer pintado para evitar el destello del
+      // tema contrario. Solo actúa si hay una elección manual guardada; sin
+      // ella, el CSS ya sigue a `prefers-color-scheme`. El ProveedorTema
+      // vuelve a fijar este atributo con la misma lógica en cuanto monta.
+      (function () {
+        try {
+          var tema = window.localStorage.getItem('lista-tareas.tema');
+          if (tema === 'claro' || tema === 'oscuro') {
+            document.documentElement.setAttribute('data-theme', tema);
+          }
+        } catch (e) {
+          /* Sin almacenamiento no hay nada que restaurar. */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="raiz"></div>

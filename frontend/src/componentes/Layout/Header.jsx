@@ -1,4 +1,5 @@
 import { useAuth } from '../../hooks/useAuth.js';
+import { useTema } from '../../hooks/useTema.js';
 import estilos from './Header.module.css';
 
 /**
@@ -11,6 +12,10 @@ import estilos from './Header.module.css';
  */
 export function Header({ panelAbierto, alAlternarPanel, idPanel }) {
   const { usuario, cerrarSesion } = useAuth();
+  const { tema, alternarTema } = useTema();
+
+  const esOscuro = tema === 'oscuro';
+  const etiquetaTema = esOscuro ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro';
 
   return (
     <header className={estilos.cabecera}>
@@ -32,6 +37,18 @@ export function Header({ panelAbierto, alAlternarPanel, idPanel }) {
         <span className={estilos.identidad}>
           {usuario?.nombre ?? usuario?.email}
         </span>
+        <button
+          className={estilos.botonTema}
+          type="button"
+          onClick={() => alternarTema()}
+          aria-label={etiquetaTema}
+          title={etiquetaTema}
+        >
+          <span className={estilos.iconoTema} aria-hidden="true">
+            {esOscuro ? '☀' : '☾'}
+          </span>
+          <span className={estilos.textoTema}>{esOscuro ? 'Claro' : 'Oscuro'}</span>
+        </button>
         <button
           className={estilos.botonSalir}
           type="button"

@@ -34,7 +34,7 @@
   position: fixed;
   inset: 0;
   z-index: 10;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--color-velo);
 }
 
 .contenido {

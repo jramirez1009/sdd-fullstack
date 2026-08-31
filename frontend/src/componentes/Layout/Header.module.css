@@ -61,6 +61,35 @@
   color: var(--color-primario);
 }
 
+.botonTema {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espacio-2);
+  padding: var(--espacio-2) var(--espacio-3);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  background-color: var(--color-superficie);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.botonTema:hover {
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+
+.iconoTema {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* En pantalla estrecha el icono basta; el texto cede el sitio como la marca. */
+@media (max-width: 47.999rem) {
+  .textoTema {
+    display: none;
+  }
+}
+
 /* Por encima del punto de corte el sidebar es permanente: el botón de menú
    sobra. */
 /* En pantalla estrecha el botón de menú ancla la cabecera; la marca cede su

@@ -2,10 +2,17 @@
  * Reset mínimo y paleta compartida. Las variables viven aquí y no en cada
  * módulo CSS para que las pantallas de los cambios siguientes no reinventen los
  * colores ni el espaciado.
+ *
+ * Tema: solo las variables de color cambian entre 'claro' y 'oscuro'. El set de
+ * abajo es el tema claro y también el que rige si el atributo `data-theme` del
+ * elemento raíz faltara. El bloque `:root[data-theme='oscuro']` redefine esas
+ * mismas variables; el resto (espaciado, tipografía, formas) es común a ambos.
+ * El atributo lo fija el ProveedorTema del frontend (y un script inline en
+ * index.html para el primer pintado).
  */
 
 :root {
-  /* Color */
+  /* Color — tema claro */
   --color-fondo: #f4f5f7;
   --color-superficie: #ffffff;
   --color-borde: #d5d8dd;
@@ -22,6 +29,8 @@
   --color-aviso-fondo: #fdf3e0;
   --color-aviso-borde: #f0d5a6;
   --color-foco: #2f5bd7;
+  /* Velo oscuro tras los paneles superpuestos y diálogos. */
+  --color-velo: rgba(0, 0, 0, 0.4);
 
   /* Espaciado */
   --espacio-1: 0.25rem;
@@ -40,6 +49,58 @@
   /* Formas */
   --radio: 6px;
   --sombra: 0 1px 3px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+/*
+ * Tema oscuro. Solo color: contraste comprobado para --color-texto y
+ * --color-texto-suave sobre --color-superficie y --color-fondo, y para
+ * --color-error / --color-aviso sobre sus respectivos fondos.
+ */
+:root[data-theme='oscuro'] {
+  --color-fondo: #14161a;
+  --color-superficie: #1e2126;
+  --color-borde: #333a43;
+  --color-texto: #e8eaed;
+  --color-texto-suave: #9aa1ab;
+  --color-primario: #7aa0ef;
+  --color-primario-oscuro: #97b5f3;
+  --color-primario-contraste: #14161a;
+  --color-error: #f2919a;
+  --color-error-fondo: #3a1c1f;
+  --color-error-borde: #7d3b42;
+  --color-aviso: #e6b769;
+  --color-aviso-fondo: #382c17;
+  --color-aviso-borde: #715a30;
+  --color-foco: #7aa0ef;
+  --color-velo: rgba(0, 0, 0, 0.6);
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+/*
+ * Antes de que el frontend monte y fije `data-theme`, un sistema en modo oscuro
+ * ya ve el tema oscuro —salvo que exista una elección manual de tema claro, que
+ * el script inline de index.html habrá marcado como `data-theme='claro'`.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='claro']) {
+    --color-fondo: #14161a;
+    --color-superficie: #1e2126;
+    --color-borde: #333a43;
+    --color-texto: #e8eaed;
+    --color-texto-suave: #9aa1ab;
+    --color-primario: #7aa0ef;
+    --color-primario-oscuro: #97b5f3;
+    --color-primario-contraste: #14161a;
+    --color-error: #f2919a;
+    --color-error-fondo: #3a1c1f;
+    --color-error-borde: #7d3b42;
+    --color-aviso: #e6b769;
+    --color-aviso-fondo: #382c17;
+    --color-aviso-borde: #715a30;
+    --color-foco: #7aa0ef;
+    --color-velo: rgba(0, 0, 0, 0.6);
+    --sombra: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.35);
+  }
 }
 
 *,
